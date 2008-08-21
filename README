@@ -1,0 +1,6 @@
+Geo Ping Merb Server
+
+Overview
+Ping servers, exemplified by Weblogs.com and blo.gs, provide a simple central point to receive updates of new content, and distribute those updates to interested consumers. The Geospatial Web contains specialized content that has been spatially described. A particular class of applications is interested in knowing when this content has been updated. There are other specialized needs, such as spatially searching updates. Geo Ping hopes to serve this purpose.
+
+
