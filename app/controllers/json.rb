@@ -28,7 +28,10 @@ class Json < Application
       {:flerror => 0, :message => "Thanks for the ping.", 
         :legal=> "You agree that use of the geoping.com ping service is governed by the Terms of Use found at www.geoping.com."}
     when "system.describe"
-      json_system_description()
+      json_system_description(
+        :name => 'Geo Ping', :id => '000',
+        :procs => METHOD_SIGNATURES
+      )
     else
       json_error("#{meth} hasn't been implemented yet")
     end
