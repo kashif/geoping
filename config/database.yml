@@ -1,0 +1,17 @@
+---
+# This is a sample database file for the ActiveRecord ORM
+:development: &defaults
+  :adapter: sqlite3
+  :database: db/sample_development.sqlite3
+  :encoding: utf8
+
+:test:
+  <<: *defaults
+  :database: db/sample_test.sqlite3
+
+:production:
+  <<: *defaults
+  :database: db/sample_production.sqlite3
+  
+:rake:
+  <<: *defaults
