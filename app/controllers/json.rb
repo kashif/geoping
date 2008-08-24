@@ -25,11 +25,14 @@ class Json < Application
   def handle(meth, rpc_params)
     case meth
     when "weblogUpdates.ping"
+      #run_later do 
+      #  do_some_processing_with(rpc_params) 
+      #end
       {:flerror => 0, :message => "Thanks for the ping.", 
         :legal=> "You agree that use of the geoping.com ping service is governed by the Terms of Use found at www.geoping.com."}
     when "system.describe"
       json_system_description(
-        :name => 'Geo Ping', :id => '000',
+        :name => 'Geo Ping', :id => '0',
         :procs => METHOD_SIGNATURES
       )
     else

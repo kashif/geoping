@@ -18,7 +18,7 @@ module Merb
         "version" => "1.1",
         "error" => {
           "name" => "JSONRPCError",
-          "code" => "000",
+          "code" => "0",
           "message" => message
         }
       }
