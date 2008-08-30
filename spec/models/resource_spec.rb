@@ -11,6 +11,16 @@ module ResourceSpecHelper
       :tag        => "blog" 
     }
   end
+  def invalid_attributes
+    {
+      :name       => "",
+      :url        => "http:",
+      :changesURL => "htt.example.com/changes.xml",
+      :rssURL     => "htt.com/feed",
+      :tag        => "blog" 
+    }
+  end
+
 end  
 
 describe Resource do  
@@ -31,24 +41,33 @@ describe Resource do
       Resource.count - count_before == 1
     end
     
-    it "should update a resource when pinged" do
+    it "should update a pinged resource that was last updated > 30min" do
       res = Resource.create(valid_attributes)
       last_updated_at = (Time.now - 1810)      
       
-      puts "last updated at: #{last_updated_at}" # check last updated at
+      puts "\nlast updated: #{last_updated_at}" # check last updated at
       
       Resource.record_timestamps = false # don't forget to reset to true
 
       res.update_attributes(:updated_at => last_updated_at)
-      puts "before #{res.updated_at}" # check updated at was correctly set
+      puts "before ping: #{res.updated_at}" # check updated at was correctly set
       
       Resource.record_timestamps = true 
       
       Resource.check_spam_from_json(valid_attributes)    
       res = Resource.find_by_url(valid_attributes[:url])
-      res.updated_at > last_updated_at
-      puts "after #{res.updated_at}"  # check the new time stamp has a diff of atleast 30min
+      res.updated_at > (last_updated_at)
+      puts "after ping: #{res.updated_at}"  # check the new time stamp has a diff of atleast 30min 
     end
+
+    it "should not update a pinged resource that was last updated < 30min ago" do
+      res = Resource.create(valid_attributes)
+      last_updated_at = res.updated_at
+      Resource.check_spam_from_json(valid_attributes)
+      res = Resource.find_by_url(valid_attributes[:url])
+      res.updated_at == (last_updated_at)  
+    end
+    
   end
 
 end
