@@ -20,16 +20,35 @@ describe Resource do
   before(:each) do    
   end
   
-  it "should check url for uniqueness"
-  it "should remove traling slashes from the url before saving"
-  
-  it "should check for spam and not update the resource if last update was < 30min ago" do
-    Resource.create(valid_attributes)
-    res = Resource.find_by_url(valid_attributes[:url])
-    res.update_attributes(:name => "some blog name") 
-    time_last_update = res.updated_at
-    res.update_attributes(:name => "new blog name") 
-    time_last_update.should == res.updated_at
-  end  
+  # it "should check url for uniqueness"                            
+  #   
+  #   it "should remove traling slashes from the url before saving"
+    
+  describe "#check_for_spam_from_json" do
+    it "should create a resource if not there" do
+      count_before = Resource.count
+      Resource.check_spam_from_json(valid_attributes)
+      Resource.count - count_before == 1
+    end
+    
+    it "should update a resource when pinged" do
+      res = Resource.create(valid_attributes)
+      last_updated_at = (Time.now - 1810)      
+      
+      puts "last updated at: #{last_updated_at}" # check last updated at
+      
+      Resource.record_timestamps = false # don't forget to reset to true
+
+      res.update_attributes(:updated_at => last_updated_at)
+      puts "before #{res.updated_at}" # check updated at was correctly set
+      
+      Resource.record_timestamps = true 
+      
+      Resource.check_spam_from_json(valid_attributes)    
+      res = Resource.find_by_url(valid_attributes[:url])
+      res.updated_at > last_updated_at
+      puts "after #{res.updated_at}"  # check the new time stamp has a diff of atleast 30min
+    end
+  end
 
 end
