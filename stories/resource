@@ -1,0 +1,56 @@
+# Description of this story
+Resource: This is a story about creating and updating a resource while avoiding spammers                          
+
+#
+# CREATE a resource step  
+#
+# TODO: ask if we are going to allow people to register their site only 
+# via the web form and use somthing like captcha to prevent spamers?   
+#
+  Story: ping the server to create a resource
+    As: a website owner 
+    I: want to ping GeoPing 
+    So: that my site is registered with the GeoPing database
+    
+    Scenario: an unregistered resource
+      Given: my site is not registered with GeoPing
+      When: I ping 
+            'http://geoping.org/weblogUpdates.ping? \ 
+              name=new-site& \    
+              url=http://newsite-example.com/& \ 
+              changesURL=http://newsite-example.com/changes.xml& \ 
+              rssURL=http://newsite-example.com/feed&tag=blog '
+      Then: my site should be registered as resource with GeoPing
+
+#
+# UPDATE a resource step
+#
+  Story: ping the server to update a resource
+    As: a website owner 
+    I: want to ping GeoPing 
+    So: that GeoPing is notified of my sites update
+
+    Scenario: update a registered resource    
+      Given: my site registered-site is in the GeoPing database
+      When: I ping 
+            'http://geoping.org/weblogUpdates.ping? \ 
+              name=registered-site& \    
+              changesURL=http://registered-example.com/changes.xml& \ 
+              rssURL=http://newsite-example.com/feed&tag=blog'
+      Then: my site should be registered as resource with GeoPing
+
+#
+# prevent spammers from updating a resource step 
+#
+  Story: spammer pings the server to register or update a resource
+    As: GeoPing owner 
+    I: want to prevent spammers from updating GeoPing 
+    So: that GeoPing is not full of useless spam  
+  
+    Scenario: check for spam
+      Given: a resources was updated less than 30 minutes ago
+      When: geoping gets pinged by that exact same resource
+      Then: geoping should not update the resource  
+     
+
+      
