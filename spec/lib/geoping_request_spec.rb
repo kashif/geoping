@@ -27,14 +27,10 @@ describe "Geo Ping Reqeusts" do
         @rpc.method_name.should == "weblogUpdates.ping"
       end
       
-      it "should provide the params in order" do
-        @rpc.params_array.should == ["Someblog", "http://spaces.msn.com/someblog"]
-      end
-      
       it "should provide the params as a hash" do
         @rpc.params.should == {
-              :site_name    => "Someblog", 
-              :site_url     => "http://spaces.msn.com/someblog", 
+              :name         => "Someblog", 
+              :url          => "http://spaces.msn.com/someblog", 
               :method_name  => "weblogUpdates.ping"
         }
       end
@@ -112,20 +108,9 @@ describe "Geo Ping Reqeusts" do
         XML
         @rpc = GeoPing::Rpc.new(:xml, @raw)
       end
-      
-      
+          
       it "should provide the method_name" do
         @rpc.method_name.should == "weblogUpdates.extendedPing"
-      end
-      
-      it "should provide the params in order" do
-        @rpc.params_array.should == [
-          "Someblog",
-          "http://spaces.msn.com/someblog",
-          "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
-          "http://spaces.msn.com/someblog/feed.rss",
-          "personal|friends"
-        ]
       end
       
       it "should have a site_url" do
@@ -140,18 +125,18 @@ describe "Geo Ping Reqeusts" do
         @rpc.feed_url.should == "http://spaces.msn.com/someblog/feed.rss"
       end
       
-      it "should have a category_name" do
-        @rpc.category_name.should == "personal|friends"
+      it "should have a tag" do
+        @rpc.tag.should == "personal|friends"
       end
       
       it "should povide the params as a hash" do
         @rpc.params.should == {
-          :site_name      => "Someblog", 
-          :site_url       => "http://spaces.msn.com/someblog", 
+          :name           => "Someblog", 
+          :url            => "http://spaces.msn.com/someblog", 
           :method_name    => "weblogUpdates.extendedPing",
-          :changes_url    => "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
-          :feed_url       => "http://spaces.msn.com/someblog/feed.rss",
-          :category_name  => "personal|friends"
+          :changesURL     => "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+          :feedURL        => "http://spaces.msn.com/someblog/feed.rss",
+          :tag  => "personal|friends"
         }
       end
       
@@ -239,7 +224,7 @@ describe "Geo Ping Reqeusts" do
         </methodCall>
         XML
         @rpc = GeoPing::Rpc.new(:xml, @raw)
-        @rpc.category_name.should == "personal|friends"
+        @rpc.tag.should == "personal|friends"
       end
       
       it "should allow for options arguments to be missing" do
@@ -264,9 +249,166 @@ describe "Geo Ping Reqeusts" do
         </methodCall>
         XML
         @rpc = GeoPing::Rpc.new(:xml, @raw)
-        @rpc.category_name.should be_nil
+        @rpc.tag.should be_nil
       end
     end
-    
   end
+  
+  describe "JSON Rpc" do
+    describe "minimal request" do
+      before(:each) do
+        raw = {
+          :method_name  => "weblogUpdates.ping",
+          :params       => ["Someblog", "http://spaces.msn.com/someblog"]
+        }
+        @raw = JSON.generate(raw)
+        @rpc = GeoPing::Rpc.new(:json, @raw)
+      end
+      
+      it "should provide the method_name" do
+        @rpc.site_name.should == "Someblog"
+      end
+
+      it "should provide the params as a hash" do
+        @rpc.params.should == {
+          :name         => "Someblog", 
+          :url          => "http://spaces.msn.com/someblog", 
+          :method_name  => "weblogUpdates.ping"
+        }
+      end
+      
+      it "should not be an extended ping" do
+        @rpc.should_not be_an_extended_ping
+      end
+      
+      it "should raise an argument error if there are too few arguments" do
+        raw = {:method_name => "weblogUpdates.ping", :params => ["Someblog"]}
+        lambda do
+          GeoPing::Rpc.new(:json, JSON.generate(raw))
+        end.should raise_error(ArgumentError)
+      end
+      
+      it "should raise an argument error if there are too many arguments" do
+        raw = {:method_name => "weblogUpdates.ping", :params => ["Someblog", "http://example.com", "http://example.com"]}
+        lambda do
+          GeoPing::Rpc.new(:json, JSON.generate(raw))
+        end.should raise_error(ArgumentError)
+      end
+      
+    end
+
+    describe "extended request" do
+      before(:each) do
+        raw = {
+          :method_name  => "weblogUpdates.extendedPing",
+          :params       => [
+            "Someblog", 
+            "http://spaces.msn.com/someblog",
+            "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+            "http://spaces.msn.com/someblog/feed.rss",
+            "personal|friends"
+          ]
+        }
+        @raw = JSON.generate(raw)
+        @rpc = GeoPing::Rpc.new(:json, @raw)
+      end
+      
+      it "should provide the method_name" do
+        @rpc.method_name.should == "weblogUpdates.extendedPing"
+      end
+      
+      it "should have a site_url" do
+        @rpc.site_url.should == "http://spaces.msn.com/someblog"
+      end
+      
+      it "should have a changes_url" do
+        @rpc.changes_url.should == "http://spaces.msn.com/someblog/PersonalSpace.aspx?something"
+      end
+      
+      it "should have a feed_url" do
+        @rpc.feed_url.should == "http://spaces.msn.com/someblog/feed.rss"
+      end
+      
+      it "should have a tag" do
+        @rpc.tag.should == "personal|friends"
+      end
+      
+      it "should povide the params as a hash" do
+        @rpc.params.should == {
+          :name           => "Someblog", 
+          :url            => "http://spaces.msn.com/someblog", 
+          :method_name    => "weblogUpdates.extendedPing",
+          :changesURL     => "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+          :feedURL        => "http://spaces.msn.com/someblog/feed.rss",
+          :tag  => "personal|friends"
+        }
+      end
+      
+      it "should be an extended_ping" do
+        @rpc.should be_an_extended_ping
+      end
+      
+      it "should raise an argument error if there are too few arguments" do
+        raw = {
+          :method_name  => "weblogUpdates.extendedPing",
+          :params       => [
+            "Someblog", 
+            "http://spaces.msn.com/someblog",
+            "http://spaces.msn.com/someblog/PersonalSpace.aspx?something"
+          ]
+        }
+        lambda do
+          @rpc = GeoPing::Rpc.new(:json, JSON.generate(raw))
+        end        
+      end
+      
+      it "should raise an argument if there are too many arguments" do
+        raw = {
+          :method_name  => "weblogUpdates.extendedPing",
+          :params       => [
+            "Someblog", 
+            "http://spaces.msn.com/someblog",
+            "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+            "http://spaces.msn.com/someblog/feed.rss",
+            "personal|friends",
+            "some other parameter"
+          ]
+        }
+        lambda do
+          @rpc = GeoPing::Rpc.new(:json, JSON.generate(raw))
+        end
+      end
+      
+      it "should allow for optional arguments to be present" do
+        raw = {
+          :method_name  => "weblogUpdates.extendedPing",
+          :params       => [
+            "Someblog", 
+            "http://spaces.msn.com/someblog",
+            "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+            "http://spaces.msn.com/someblog/feed.rss",
+            "personal|friends"
+          ]
+        }
+        @rpc = GeoPing::Rpc.new(:json, JSON.generate(raw))
+        @rpc.tag.should == "personal|friends"
+      end
+      
+      it "should allow for options arguments to be missing" do
+        raw = {
+          :method_name  => "weblogUpdates.extendedPing",
+          :params       => [
+            "Someblog", 
+            "http://spaces.msn.com/someblog",
+            "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+            "http://spaces.msn.com/someblog/feed.rss"
+          ]
+        }
+        @rpc = GeoPing::Rpc.new(:json, JSON.generate(raw))
+        @rpc.tag.should be_nil
+      end
+      
+    end #  "extended request"
+  end # "JSON Rpc" 
+  
 end

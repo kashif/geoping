@@ -3,12 +3,16 @@ module GeoPing
   class Rpc 
     include RpcRequestFormats
     
+     METHOD_SIGNATURES = {
+      "weblogUpdates.ping" => [:obj, {:name => :str, :url => :str}],
+      "weblogUpdates.extendedPing" => [:obj, {:name => :str, :url => :str, :changesURL => :str, :feedURL => :str, :tag => :str}],
+      "system.describe" => [:obj, nil]
+    }
+    
     attr_reader :raw, 
                 :format, 
                 :params, 
-                :params_array, 
-                :method_name,
-                :site_name
+                :params_array
                 
     cattr_reader :formats
     @@formats = [:xml, :json]
@@ -26,12 +30,12 @@ module GeoPing
       @extended_ping ||= !!(method_name.split(".").last == "extendedPing")
     end
     
-    def site_name;      @params[:site_name];      end
-    def site_url;       @params[:site_url];       end
+    def site_name;      @params[:name];           end
+    def site_url;       @params[:url];            end
     def method_name;    @params[:method_name];    end
-    def changes_url;    @params[:changes_url];    end
-    def category_name;  @params[:category_name];  end
-    def feed_url;       @params[:feed_url];       end
+    def changes_url;    @params[:changesURL];     end
+    def feed_url;       @params[:feedURL];        end
+    def tag;            @params[:tag];            end
     
     
     private 
@@ -51,7 +55,7 @@ module GeoPing
     def minimal_params_from_array(array)
       raise ArgumentError, "Do not recognize as a ping #{array.inspect}" unless array.size == 2
       result = {}
-      [:site_name, :site_url].each_with_index do |v,i|
+      [:name, :url].each_with_index do |v,i|
         result[v] = array[i]
       end
       result
@@ -61,10 +65,10 @@ module GeoPing
     def extended_params_from_array(array)
       raise ArgumentError, "Do not recognize as an extended ping #{array.inspect}" if array.size < 4 || array.size > 5
       result = {}
-      [:site_name, :site_url, :changes_url, :feed_url].each_with_index do |v,i|
+      [:name, :url, :changesURL, :feedURL].each_with_index do |v,i|
         result[v] = array[i]
       end
-      result[:category_name] = array.last if array.size == 5
+      result[:tag] = array.last if array.size == 5
       result
     end
 

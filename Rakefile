@@ -26,8 +26,14 @@ end
 
 require 'spec/rake/spectask'
 require 'merb-core/test/tasks/spectasks'
-desc 'Default: run spec examples'
-task :default => 'spec'
+desc "Run all specs"
+Spec::Rake::SpecTask.new("spec") do |t|
+  t.spec_opts = ["--format", "specdoc", "--colour"]
+  t.spec_files = Dir["spec/**/*_spec.rb"].sort
+  t.rcov = false
+  t.rcov_opts << '--sort' << 'coverage' << '--sort-reverse'
+  t.rcov_opts << '--only-uncovered'
+end
 
 ##############################################################################
 # ADD YOUR CUSTOM TASKS IN /lib/tasks

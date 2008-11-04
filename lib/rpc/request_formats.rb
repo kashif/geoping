@@ -11,5 +11,13 @@ module GeoPing
       out
     end
     
+    def process_from_json
+      raw = JSON.parse(@raw)
+      out = {}
+      out[:method_name]   = raw["method_name"]
+      out[:params_array] = raw["params"] || []
+      out
+    end
+    
   end # GeoPing
 end # RequestFormats
