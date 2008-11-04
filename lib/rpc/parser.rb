@@ -8,6 +8,70 @@ module GeoPing
       "weblogUpdates.extendedPing" => [:obj, {:name => :str, :url => :str, :changesURL => :str, :feedURL => :str, :tag => :str}],
       "system.describe" => [:obj, nil]
     }
+    #The method signature for an RPC call is:
+    #
+    # weblogUpdates.ping
+    #    {:method_name => "weblogUpdates.ping", :params => ["site name", "site url"]}
+    #
+    # weblogUpdaetes.extendedPing
+    #    {
+    #       :method_name => "weblogUpdaets.extendedPing",
+    #       :params      => ["site name", "site url", "changes url", "feed url", <"tags">]
+    #    }
+    #
+    #  The <"tags"> paramter is optional and may be left out of the params array
+    #
+    #  ===Example
+    #  ====Ping
+    #  =====JSON
+    #
+    #    {method_name: "weblogUpdates.ping", params: ["site name", "site url"]}
+    #
+    #  =====XML
+    #
+    #       <?xml version="1.0"?>
+    #       <methodCall>
+    #         <methodName>weblogUpdates.ping</methodName>
+    #         <params>
+    #           <param>
+    #             <value>site name</value>
+    #           </param>
+    #           <param>
+    #             <value>site url</value>
+    #           </param>
+    #         </params>
+    #       </methodCall>
+    #
+    # ====ExtendedPing
+    # =====JSON
+    #
+    #   {
+    #       method_name: "weblogUpdaets.extendedPing",
+    #       params:      ["site name", "site url", "changes url", "feed url", <"tags">]
+    #    }
+    #
+    #  =====XML
+    #     <?xml version="1.0"?>
+    #     <methodCall>
+    #       <methodName>weblogUpdates.extendedPing</methodName>
+    #       <params>
+    #         <param>
+    #           <value>Someblog</value>
+    #         </param>
+    #         <param>
+    #           <value>http://spaces.msn.com/someblog</value>
+    #         </param>
+    #         <param>
+    #           <value>http://spaces.msn.com/someblog/PersonalSpace.aspx?something</value>
+    #         </param>
+    #         <param>
+    #           <value>http://spaces.msn.com/someblog/feed.rss</value>
+    #         </param>
+    #         <param>
+    #           <value>personal|friends</value>
+    #         </param>
+    #       </params>
+    #     </methodCall>
     
     attr_reader :raw, 
                 :format, 
@@ -26,10 +90,12 @@ module GeoPing
       self
     end
     
+    # Checks to see if a ping is an extended ping or a normal ping.
     def extended_ping?
       @extended_ping ||= !!(method_name.split(".").last == "extendedPing")
     end
     
+    # Handy Accessors for the parameters
     def site_name;      @params[:name];           end
     def site_url;       @params[:url];            end
     def method_name;    @params[:method_name];    end
