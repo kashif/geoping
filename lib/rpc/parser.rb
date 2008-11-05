@@ -3,11 +3,12 @@ module GeoPing
   class Rpc 
     include RpcRequestFormats
     
-     METHOD_SIGNATURES = {
-      "weblogUpdates.ping" => [:obj, {:name => :str, :url => :str}],
-      "weblogUpdates.extendedPing" => [:obj, {:name => :str, :url => :str, :changesURL => :str, :feedURL => :str, :tag => :str}],
-      "system.describe" => [:obj, nil]
-    }
+    #  METHOD_SIGNATURES = {
+    #   "weblogUpdates.ping" => [:obj, {:name => :str, :url => :str}],
+    #   "weblogUpdates.extendedPing" => [:obj, {:name => :str, :url => :str, :changesURL => :str, :feedURL => :str, :tag => :str}],
+    #   "system.describe" => [:obj, nil]
+    # }
+    
     #The method signature for an RPC call is:
     #
     # weblogUpdates.ping

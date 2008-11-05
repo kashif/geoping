@@ -15,7 +15,7 @@ module GeoPing
       raw = JSON.parse(@raw)
       out = {}
       out[:method_name]   = raw["method_name"]
-      out[:params_array] = raw["params"] || []
+      out[:params_array]  = raw["params"] || []
       out
     end
     
