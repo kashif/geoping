@@ -8,6 +8,7 @@ end
 
 require "merb-core"
 require "spec" # Satisfies Autotest and anyone else not using the Rake tasks
+require(File.dirname(__FILE__) / "spec_helpers.rb")
 
 # this loads all plugins required in your init file so don't add them
 # here again, Merb will do it for you
@@ -17,4 +18,5 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::ViewHelper)
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
+  config.include(GeoPing::SpecHelpers)
 end

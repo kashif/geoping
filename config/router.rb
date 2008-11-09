@@ -27,18 +27,19 @@
 
 Merb.logger.info("Compiling routes...")
 Merb::Router.prepare do
-  # RESTful routes
-  # resources :posts
+
+  # Munge the data from the rpc request
+  match("/api/rpc/:format", :method => :post).defer_to do |request, params|
+    params[:controller] = "pings"
+    params[:action]     = "create"
+    request.params[:format] = params[:format]
+    params.merge!(GeoPing::Rpc.new(params[:format].to_sym, request.raw_post).params)
+    params
+  end
+  
+  # Match the routes for a RESTful ping
+  match("/pings(.:format)", :method => :post).to(:controller => "pings", :action => "create")
   
   # Adds the required routes for merb-auth using the password slice
-  slice(:merb_auth_slice_password, :name_prefix => nil, :path_prefix => "")
-
-  # This is the default route for /:controller/:action/:id
-  # This is fine for most cases.  If you're heavily using resource-based
-  # routes, you may want to comment/remove this line to prevent
-  # clients from calling your create or destroy actions with a GET
-  default_routes
-  
-  # Change this for your home page to be available at /
-  # match('/').to(:controller => 'whatever', :action =>'index')
+  # slice(:merb_auth_slice_password, :name_prefix => nil, :path => "")
 end
