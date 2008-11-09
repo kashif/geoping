@@ -1,5 +1,5 @@
 # dependencies are generated using a strict version, don't forget to edit the dependency versions when upgrading.
-merb_gems_version = "0.9.13"
+merb_gems_version = "1.0"
 dm_gems_version   = "0.9.6"
 
 # For more information about each component, please read http://wiki.merbivore.com/faqs/merb_components
@@ -14,7 +14,6 @@ dependency "merb-auth-more", merb_gems_version
 dependency "merb-auth-slice-password", merb_gems_version
 dependency "merb-param-protection", merb_gems_version
 dependency "merb-exceptions", merb_gems_version
-dependency "nokogiri", ">=1.0.2"
  
 dependency "dm-core", dm_gems_version         
 dependency "dm-aggregates", dm_gems_version   
