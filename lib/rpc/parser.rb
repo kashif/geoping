@@ -1,7 +1,9 @@
 module GeoPing
+  
   class FormatNotSupported < Merb::Controller::UnsupportedMediaType; end
   class RpcArgumentError < Merb::Controller::BadRequest; end
   class RestArgumentError < Merb::Controller::BadRequest; end
+  
   module Version1_0_0
     class Rpc
       include RpcRequestFormats

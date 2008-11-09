@@ -11,9 +11,9 @@ module GeoPing
     
     def valid_extended_ping(format = :xml,  opts = {})
       opts = opts.dup
-      opts[:method]       ||= "weblogUpdates.extendedPing"
-      opts[:name]         ||= "Someblog"
-      opts[:url]          ||= "http://spaces.msn.com/someblog"
+      opts[:method]        ||= "weblogUpdates.extendedPing"
+      opts[:name]          ||= "Someblog"
+      opts[:url]           ||= "http://spaces.msn.com/someblog"
       opts[:changes_url]   ||= "http://spaces.msn.com/someblog/PersonalSpace.aspx?something"
       opts[:feed_url]      ||= "http://spaces.msn.com/someblog/feed.rss"
       self.send(:"valid_#{format}_extended_ping", opts)
