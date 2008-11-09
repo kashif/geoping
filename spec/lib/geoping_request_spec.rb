@@ -6,20 +6,7 @@ describe "Geo Ping Reqeusts" do
   
     describe "Minimal Request" do
       before(:each) do
-        @raw = <<-XML
-          <?xml version="1.0"?>
-          <methodCall>
-            <methodName>weblogUpdates.ping</methodName>
-            <params>
-              <param>
-                <value>Someblog</value>
-              </param>
-              <param>
-                <value>http://spaces.msn.com/someblog</value>
-              </param>
-            </params>
-          </methodCall>
-        XML
+        @raw = valid_ping(:xml)
         @rpc = GeoPing::Rpc.new(:xml, @raw)
       end
       
@@ -53,7 +40,7 @@ describe "Geo Ping Reqeusts" do
         XML
         lambda do
           @rpc = GeoPing::Rpc.new(:xml, @raw)
-        end.should raise_error(ArgumentError)
+        end.should raise_error(GeoPing::RpcArgumentError)
       end
       
       it "should raise an argument error if there are too many arguments" do
@@ -76,36 +63,14 @@ describe "Geo Ping Reqeusts" do
         XML
         lambda do
           @rpc = GeoPing::Rpc.new(:xml, @raw)
-        end.should raise_error(ArgumentError)
+        end.should raise_error(GeoPing::RpcArgumentError)
       end
       
     end
   
     describe "Extended Request" do
       before(:each) do
-        @raw = <<-XML
-        <?xml version="1.0"?>
-        <methodCall>
-          <methodName>weblogUpdates.extendedPing</methodName>
-          <params>
-            <param>
-              <value>Someblog</value>
-            </param>
-            <param>
-              <value>http://spaces.msn.com/someblog</value>
-            </param>
-            <param>
-              <value>http://spaces.msn.com/someblog/PersonalSpace.aspx?something</value>
-            </param>
-            <param>
-              <value>http://spaces.msn.com/someblog/feed.rss</value>
-            </param>
-            <param>
-              <value>personal|friends</value>
-            </param>
-          </params>
-        </methodCall>
-        XML
+        @raw = valid_extended_ping(:xml, :tag => "personal|friends")
         @rpc = GeoPing::Rpc.new(:xml, @raw)
       end
           
@@ -134,8 +99,8 @@ describe "Geo Ping Reqeusts" do
           :name           => "Someblog", 
           :url            => "http://spaces.msn.com/someblog", 
           :method_name    => "weblogUpdates.extendedPing",
-          :changesURL     => "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
-          :feedURL        => "http://spaces.msn.com/someblog/feed.rss",
+          :changes_url     => "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+          :feed_url        => "http://spaces.msn.com/someblog/feed.rss",
           :tag  => "personal|friends"
         }
       end
@@ -164,7 +129,7 @@ describe "Geo Ping Reqeusts" do
         XML
         lambda do
           @rpc = GeoPing::Rpc.new(:xml, @raw)
-        end.should raise_error(ArgumentError)
+        end.should raise_error(GeoPing::RpcArgumentError)
       end
       
       it "should raise an argument if there are too many arguments" do
@@ -196,7 +161,7 @@ describe "Geo Ping Reqeusts" do
         XML
         lambda do
           @rpc = GeoPing::Rpc.new(:xml, @raw)
-        end.should raise_error(ArgumentError)
+        end.should raise_error(GeoPing::RpcArgumentError)
       end
       
       it "should allow for optional arguments to be present" do
@@ -257,11 +222,7 @@ describe "Geo Ping Reqeusts" do
   describe "JSON Rpc" do
     describe "minimal request" do
       before(:each) do
-        raw = {
-          :method_name  => "weblogUpdates.ping",
-          :params       => ["Someblog", "http://spaces.msn.com/someblog"]
-        }
-        @raw = JSON.generate(raw)
+        @raw = valid_ping(:json)
         @rpc = GeoPing::Rpc.new(:json, @raw)
       end
       
@@ -285,31 +246,21 @@ describe "Geo Ping Reqeusts" do
         raw = {:method_name => "weblogUpdates.ping", :params => ["Someblog"]}
         lambda do
           GeoPing::Rpc.new(:json, JSON.generate(raw))
-        end.should raise_error(ArgumentError)
+        end.should raise_error(GeoPing::RpcArgumentError)
       end
       
       it "should raise an argument error if there are too many arguments" do
         raw = {:method_name => "weblogUpdates.ping", :params => ["Someblog", "http://example.com", "http://example.com"]}
         lambda do
           GeoPing::Rpc.new(:json, JSON.generate(raw))
-        end.should raise_error(ArgumentError)
+        end.should raise_error(GeoPing::RpcArgumentError)
       end
       
     end
 
     describe "extended request" do
       before(:each) do
-        raw = {
-          :method_name  => "weblogUpdates.extendedPing",
-          :params       => [
-            "Someblog", 
-            "http://spaces.msn.com/someblog",
-            "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
-            "http://spaces.msn.com/someblog/feed.rss",
-            "personal|friends"
-          ]
-        }
-        @raw = JSON.generate(raw)
+        @raw = valid_extended_ping(:json, :tag => "personal|friends")
         @rpc = GeoPing::Rpc.new(:json, @raw)
       end
       
@@ -338,8 +289,8 @@ describe "Geo Ping Reqeusts" do
           :name           => "Someblog", 
           :url            => "http://spaces.msn.com/someblog", 
           :method_name    => "weblogUpdates.extendedPing",
-          :changesURL     => "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
-          :feedURL        => "http://spaces.msn.com/someblog/feed.rss",
+          :changes_url     => "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+          :feed_url        => "http://spaces.msn.com/someblog/feed.rss",
           :tag  => "personal|friends"
         }
       end
