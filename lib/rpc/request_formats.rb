@@ -8,7 +8,14 @@ module GeoPing
         doc = Nokogiri::XML(@raw)
         out = {}
         out[:method_name]   = doc.css("methodCall methodName").text
-        out[:params_array]  = doc.css("methodCall params param").map{|n| n.css("value").text}
+        out[:params_array]  = doc.css("methodCall params param").map do |n|
+          if n.css("value lat").blank?
+            n.css("value").text
+          else
+            # This is a geo attribute
+            {"lat" => n.css("value lat").text.to_f, "long" => n.css("value long").text.to_f}
+          end
+        end
         out
       end
     

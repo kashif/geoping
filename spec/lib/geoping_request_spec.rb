@@ -362,4 +362,84 @@ describe "Geo Ping Reqeusts" do
     end #  "extended request"
   end # "JSON Rpc" 
   
+  describe "geoPing" do
+    [:json, :xml].each do |fmt|
+      describe "#{fmt}" do
+        before(:each) do
+          @raw = valid_geo_ping(fmt)
+          @rpc = GeoPing::Rpc.new(fmt, @raw)
+        end
+    
+        it "should provide the method_name" do
+          @rpc.method_name.should == "weblogUpdates.geoPing"
+        end
+        
+        it "should provide the params as a hash" do
+          @rpc.params.should == {
+                :name         => "Someblog", 
+                :url          => "http://spaces.msn.com/someblog", 
+                :method_name  => "weblogUpdates.geoPing",
+                :geo          => {"lat" => 1.2343, "long" => 2.344}
+          }
+        end
+        
+        it "should not be an extended ping" do
+          @rpc.should_not be_an_extended_ping
+        end
+        
+        it "should provide the lat/long" do
+          @rpc.geo.should == {"lat" => 1.2343, "long" => 2.344}
+        end
+      end
+    end # [:json, :xml] 
+  end # geoPing
+  
+  describe "extendedGeoPing" do
+    [:json, :xml].each do |fmt|
+      describe "#{fmt}" do
+        before(:each) do
+          @raw = valid_extended_geo_ping(fmt, :tag => "personal|friends")
+          @rpc = GeoPing::Rpc.new(fmt, @raw)
+        end
+        
+        it "should provide the method_name" do
+          @rpc.method_name.should == "weblogUpdates.extendedGeoPing"
+        end
+        it "should have a site_url" do
+          @rpc.site_url.should == "http://spaces.msn.com/someblog"
+        end
+
+        it "should have a changes_url" do
+          @rpc.changes_url.should == "http://spaces.msn.com/someblog/PersonalSpace.aspx?something"
+        end
+
+        it "should have a feed_url" do
+          @rpc.feed_url.should == "http://spaces.msn.com/someblog/feed.rss"
+        end
+
+        it "should have a tag" do
+          @rpc.tag.should == "personal|friends"
+        end
+
+        it "should have a geo hash" do
+          @rpc.geo.should == {"lat" => 1.2343, "long" => 2.344}
+        end
+          
+        it "should povide the params as a hash" do
+          @rpc.params.should == {
+            :name           => "Someblog", 
+            :url            => "http://spaces.msn.com/someblog", 
+            :method_name    => "weblogUpdates.extendedGeoPing",
+            :changes_url    => "http://spaces.msn.com/someblog/PersonalSpace.aspx?something",
+            :feed_url       => "http://spaces.msn.com/someblog/feed.rss",
+            :tag            => "personal|friends",
+            :geo            => {"lat" => 1.2343, "long" => 2.344}
+          }
+          
+        end
+        
+      end # fmt
+    end # [:json,:xml]
+  end
+  
 end

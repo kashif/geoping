@@ -17,7 +17,27 @@ module GeoPing
       opts[:changes_url]   ||= "http://spaces.msn.com/someblog/PersonalSpace.aspx?something"
       opts[:feed_url]      ||= "http://spaces.msn.com/someblog/feed.rss"
       self.send(:"valid_#{format}_extended_ping", opts)
-    end # valid_ping
+    end # valid_extended_ping
+    
+    def valid_geo_ping(format = :xml, opts = {})
+      opts = opts.dup
+      opts[:method] ||= "weblogUpdates.geoPing"
+      opts[:name]   ||= "Someblog"
+      opts[:url]    ||= "http://spaces.msn.com/someblog"
+      opts[:geo]    ||= {:lat => 1.2343, :long => 2.344}
+      self.send(:"valid_#{format}_geo_ping", opts)
+    end
+    
+    def valid_extended_geo_ping(format = :xml,  opts = {})
+      opts = opts.dup
+      opts[:method]        ||= "weblogUpdates.extendedGeoPing"
+      opts[:name]          ||= "Someblog"
+      opts[:url]           ||= "http://spaces.msn.com/someblog"
+      opts[:changes_url]   ||= "http://spaces.msn.com/someblog/PersonalSpace.aspx?something"
+      opts[:feed_url]      ||= "http://spaces.msn.com/someblog/feed.rss"
+      opts[:geo]           ||= {:lat => 1.2343, :long => 2.344}
+      self.send(:"valid_#{format}_extended_geo_ping", opts)
+    end # valid_extended_ping
     
     def rpc_valid_response(format)
       self.send(:"rpc_valid_response_#{format}")
@@ -239,5 +259,90 @@ out += <<-XML
       JSON.generate(raw)
     end # valid_json_extended_ping
 
+    def valid_xml_geo_ping(opts)
+      raw = <<-XML
+<?xml version="1.0"?>
+<methodCall>
+  <methodName>#{opts[:method]}</methodName>
+  <params>
+    <param>
+      <value>#{opts[:name]}</value>
+    </param>
+    <param>
+      <value>#{opts[:url]}</value>
+    </param>
+    <param>
+      <value>
+        <lat>#{opts[:geo][:lat]}</lat>
+        <long>#{opts[:geo][:long]}</long>
+      </value
+    </param>
+  </params>
+</methodCall>
+      XML
+    end # valid_xml_geo_ping
+    
+    def valid_json_geo_ping(opts)
+      raw = {
+        :method_name  => opts[:method],
+        :params       => [
+          opts[:name], 
+          opts[:url],
+          opts[:geo]
+        ]
+      }
+      JSON.generate(raw)
+    end
+    
+    def valid_xml_extended_geo_ping(opts)
+      out = <<-XML
+    <?xml version="1.0"?>
+    <methodCall>
+      <methodName>weblogUpdates.extendedGeoPing</methodName>
+      <params>
+        <param>
+          <value>#{opts[:name]}</value>
+        </param>
+        <param>
+          <value>#{opts[:url]}</value>
+        </param>
+        <param>
+          <value>#{opts[:changes_url]}</value>
+        </param>
+        <param>
+          <value>#{opts[:feed_url]}</value>
+        </param>
+        <param>
+          <value>
+            <lat>#{opts[:geo][:lat]}</lat>
+            <long>#{opts[:geo][:long]}</long>
+          </value
+        </param>
+      XML
+      if opts[:tag]
+        out += <<-XML
+        <param>
+          <value>#{opts[:tag]}</value>
+        </param>
+        XML
+      end
+    out += <<-XML
+      </params>
+    </methodCall>
+          XML
+    end
+    
+    def valid_json_extended_geo_ping(opts)
+      the_params = [opts[:name], opts[:url], opts[:changes_url], opts[:feed_url], opts[:geo]]
+      the_params << opts[:tag] if opts[:tag]
+      
+      
+      raw = {
+        :method_name  => "weblogUpdates.extendedGeoPing",
+        :params       => the_params
+      }
+      JSON.generate(raw)
+    end # valid_json_extended_ping
+    
   end # SpecHelpers
 end # GeoPing
