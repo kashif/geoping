@@ -16,3 +16,14 @@ dependency "merb-param-protection", merb_gems_version
 dependency "merb-exceptions", merb_gems_version
 
 dependency "nokogiri", ">=1.0.2"
+
+dependency "postgres",          ">= 0.7.9.2008.01.28"
+dependency "activerecord",      "= 2.1.2", :immediate => true
+dependency "merb_activerecord", "0.9.9"
+dependency "GeoRuby",           "= 1.3.3", :require_as => "geo_ruby"
+
+# need to give activerecord a chance to load before hitting this one
+Merb::BootLoader.after_app_loads do
+  dependency "merb_has_rails_plugins", ">= 0.1.0"
+end
+

@@ -2,8 +2,11 @@
 # This is a sample database file for the DataMapper ORM
 development: &defaults
   # These are the settings for repository :default
-  adapter:  sqlite3
-  database: sample_development.db
+  adapter:  postgresql
+  database: geoping_development
+  user: root
+  password: sekrit
+  host: localhost
  
   # Add more repositories
   # repositories:
@@ -15,7 +18,7 @@ development: &defaults
  
 test:
   <<:       *defaults
-  database: sample_test.db
+  database: geoping_test
  
   # repositories:
   #   repo1:
@@ -23,7 +26,7 @@ test:
  
 production:
   <<:       *defaults
-  database: production.db
+  database: geoping_production
  
   # repositories:
   #   repo1:
