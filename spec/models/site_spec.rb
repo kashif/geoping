@@ -1,7 +1,8 @@
 require File.join(File.dirname(__FILE__), '..', 'spec_helper.rb')
 
 describe "site" do
-  it "should belong to a provider"
+  it "should belong to a provider" do
+  end
   it "should be invalid without a provider"
   it "should have a url"
   it "should check that a url is valid"

@@ -8,7 +8,7 @@ class InitialMigration < ActiveRecord::Migration
       t.string      :email
       t.string      :salt
       t.string      :crypted_password
-      t.column      :default_location, :point, :null=>false, :srid => 4326
+      t.column      :default_location, :point, :srid => 4326
       t.timestamps
     end
     add_index :providers, :identity_url

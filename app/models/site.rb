@@ -5,8 +5,5 @@ class Site < ActiveRecord::Base
   
   belongs_to  :provider
   has_many    :pings
-  
-  def url
-    @url ||= self.domain.to_s + self.base_path
-  end
+
 end
