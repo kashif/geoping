@@ -47,6 +47,12 @@ describe Ping do
     ping.errors.on(:changes_url).should be_blank
   end
   
+  it "should have an error if the changes_url is not a url" do
+    ping = Ping.make_unsaved(:changes_url => "not a url")
+    ping.save
+    ping.errors.on(:changes_url).should_not be_blank
+  end
+  
   it "should have a feed_url" do
     @ping.feed_url.should_not be_nil
   end
@@ -64,6 +70,12 @@ describe Ping do
     ping = Ping.make(:feed_url => nil)
     ping.feed_url.should == ping.site.feed_url
   end
+  
+  it "should have an error if the feed_url is not a url" do
+    ping = Ping.make_unsaved(:feed_url => "not a url")
+    ping.save
+    ping.errors.on(:feed_url).should_not be_blank
+  end
 
   it "should not raise an error if there is no url passed in" do
     ping = Ping.make(:url => nil)
@@ -72,6 +84,12 @@ describe Ping do
   
   it "should use the url of the site when saving the ping" do
     @ping.url.should == @ping.site.url
+  end
+  
+  it "should have an error if the url is not a url" do
+    ping = Ping.make_unsaved(:url => "not a url")
+    ping.save
+    ping.errors.on(:url).should_not be_blank
   end
   
   it "should use save the :geo {:lat => xxx, :long => xxx} into geom" do

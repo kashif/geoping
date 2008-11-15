@@ -10,12 +10,17 @@ class Ping < ActiveRecord::Base
   attr_accessor :geo
   
   validates_presence_of :site
+  validate :validate_urls
   
   belongs_to :site
   
   before_create :set_values_from_site
   
   private
+  def validate_urls
+    validate_fields_as_urls :url, :feed_url, :changes_url
+  end # validate_urls
+  
   def set_values_from_site
     self.name       = site.name
     self.url        = site.url

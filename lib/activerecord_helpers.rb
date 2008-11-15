@@ -4,6 +4,7 @@ module GeoPing
     # @private
     def validate_fields_as_urls(*fields)
       fields.each do |the_field|
+        next unless self.send(the_field)
         begin
           URI.parse(self.send(the_field))
         rescue
