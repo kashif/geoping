@@ -21,3 +21,13 @@ Provider.blueprint do
   email             { Sham.email}
   default_location  { Sham.geo }
 end
+
+Ping.blueprint do
+  name          {Sham.name}
+  url           {Sham.url}
+  changes_url   {Sham.url}
+  feed_url      {Sham.url}
+  site          {Site.make}
+  geom          {Sham.geo}
+  created_at    {DateTime.now}
+end

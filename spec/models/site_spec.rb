@@ -52,6 +52,15 @@ describe "site" do
     s2.errors.on(:url).should_not be_blank
   end
   
-  describe "finding a registered site" do
+  it "should have many pings" do
+    @site.pings.should be_a_kind_of(Array)
   end
+  
+  it "should allow us to add a ping" do
+    p = Ping.make
+    @site.pings << p
+    @site.save
+    @site.pings.should include(p)
+  end
+
 end
