@@ -16,8 +16,7 @@ class InitialMigration < ActiveRecord::Migration
     
     create_table :sites, :force => true do |t|
       t.string      :name
-      t.string      :domain
-      t.string      :base_path
+      t.string      :url
       t.string      :feed_url
       t.integer     :provider_id
       t.timestamps

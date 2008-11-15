@@ -11,6 +11,8 @@ require "spec" # Satisfies Autotest and anyone else not using the Rake tasks
 require(File.dirname(__FILE__) / "spec_helpers.rb")
 require File.expand_path(File.dirname(__FILE__) + "/blueprints")
 
+dependency "faker", "=0.3.1"
+
 # this loads all plugins required in your init file so don't add them
 # here again, Merb will do it for you
 Merb.start_environment(:testing => true, :adapter => 'runner', :environment => ENV['MERB_ENV'] || 'test')
@@ -20,5 +22,13 @@ Spec::Runner.configure do |config|
   config.include(Merb::Test::RouteHelper)
   config.include(Merb::Test::ControllerHelper)
   config.include(GeoPing::SpecHelpers)
-  config.before(:each) { Sham.reset }  
+  config.before(:each) do
+    Sham.reset
+    Provider.delete_all
+    Site.delete_all
+    Ping.delete_all
+  end
 end
+
+require File.expand_path(File.dirname(__FILE__) + "/blueprints")
+
