@@ -6,6 +6,8 @@ class InitialMigration < ActiveRecord::Migration
       t.string      :identity_url
       t.string      :nickname
       t.string      :email
+      t.string      :salt
+      t.string      :crypted_password
       t.column      :default_location, :point, :null=>false, :srid => 4326
       t.timestamps
     end
@@ -39,5 +41,8 @@ class InitialMigration < ActiveRecord::Migration
   end
 
   def self.down
+    drop_table :providers
+    drop_table :sites
+    drop_table :pings
   end
 end
