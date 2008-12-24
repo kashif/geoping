@@ -1,0 +1,6 @@
+[submodule "plugins/machinist"]
+	path = plugins/machinist
+	url = git://github.com/notahat/machinist.git
+[submodule "plugins/spatial_adapter"]
+	path = plugins/spatial_adapter
+	url = git://github.com/pdeffendol/spatial_adapter.git
