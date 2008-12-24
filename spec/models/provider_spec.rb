@@ -26,5 +26,9 @@ describe Provider do
     @provider.sites << [Site.make(:provider => @provider ), Site.make(:provider => @provider )]
     @provider.sites.count.should == 2 
   end
-    
+
+  it "can have one or more pings for any site" do    
+    @provider = Provider.make
+    @site = Site.make()
+  end
 end
