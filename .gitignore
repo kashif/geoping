@@ -1,3 +1,26 @@
 .DS_Store
+<<<<<<< HEAD:.gitignore
 db/*.sqlite3
 log/*.log
+=======
+log/*
+tmp/*
+TAGS
+*~
+.#*
+schema/schema.rb
+schema/*_structure.sql
+schema/*.sqlite3
+schema/*.sqlite
+schema/*.db
+*.sqlite
+*.sqlite3
+*.db
+src/*
+.hgignore
+.hg/*
+.svn/*
+config/database.yml
+gems/gems
+gems/specifications
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:.gitignore

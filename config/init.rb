@@ -1,3 +1,4 @@
+<<<<<<< HEAD:config/init.rb
 #
 # ==== Structure of Merb initializer
 #
@@ -72,7 +73,14 @@ end
 # use_orm :datamapper
 
 # Uncomment for ActiveRecord ORM
+=======
+# Go to http://wiki.merbivore.com/pages/init-rb
+ 
+require 'config/dependencies.rb'
+ 
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:config/init.rb
 use_orm :activerecord
+<<<<<<< HEAD:config/init.rb
 
 # Uncomment for Sequel ORM
 # use_orm :sequel
@@ -90,7 +98,10 @@ use_orm :activerecord
 # merb-core provides support for RSpec.
 #
 # use_test :test_unit
+=======
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:config/init.rb
 use_test :rspec
+<<<<<<< HEAD:config/init.rb
 
 
 #
@@ -99,7 +110,10 @@ use_test :rspec
 
 # Merb can generate views for different template engines, choose your favourite as the default.
 
+=======
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:config/init.rb
 use_template_engine :erb
+<<<<<<< HEAD:config/init.rb
 # use_template_engine :haml
 
 
@@ -117,7 +131,11 @@ use_template_engine :erb
 # Please use command line options for them.
 # See http://wiki.merbivore.com/pages/merb-core-boot-process
 # if you want to know more.
+=======
+ 
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:config/init.rb
 Merb::Config.use do |c|
+<<<<<<< HEAD:config/init.rb
 
   # Sets up a custom session id key which is used for the session persistence
   # cookie name.  If not specified, defaults to '_session_id'.
@@ -125,13 +143,32 @@ Merb::Config.use do |c|
   
   # The session_secret_key is only required for the cookie session store.
   c[:session_secret_key]  = 'd6d5a5351e1cc88e1cb936ad5e03a960be95fd55'
+=======
+  c[:use_mutex] = false
+  c[:session_store] = 'cookie'  # can also be 'memory', 'memcache', 'container', 'datamapper
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:config/init.rb
   
+<<<<<<< HEAD:config/init.rb
   # There are various options here, by default Merb comes with 'cookie', 
   # 'memory' or 'memcached'.  You can of course use your favorite ORM 
   # instead: 'datamapper', 'sequel' or 'activerecord'.
   c[:session_store] = 'cookie'
+=======
+  # cookie session store configuration
+  c[:session_secret_key]  = '8364660810f24542cc5177f2e4e4ecf5a31e0a7a'  # required for cookie session store
+  # c[:session_id_key] = '_session_id' # cookie session id key, defaults to "_session_id"
+end
+ 
+Merb::BootLoader.before_app_loads do
+  # This will get executed after dependencies have been loaded but before your app's classes have loaded.
+end
+ 
+Merb::BootLoader.after_app_loads do
+  # This will get executed after your app's classes have been loaded.
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:config/init.rb
 end
 
+<<<<<<< HEAD:config/init.rb
 
 # ==== Tune your inflector
 
@@ -173,3 +210,6 @@ end
 # And the result is:
 # irb> "wife".plural
 # => wives
+=======
+Merb.push_path(:lib, Merb.root / "lib", "**/*.rb")
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:config/init.rb

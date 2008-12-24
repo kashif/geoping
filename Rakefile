@@ -1,9 +1,13 @@
 require 'rubygems'
+<<<<<<< HEAD:Rakefile
 Gem.clear_paths
 Gem.path.unshift(File.join(File.dirname(__FILE__), "gems"))
 
 require 'rake'
+=======
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:Rakefile
 require 'rake/rdoctask'
+<<<<<<< HEAD:Rakefile
 require 'rake/testtask'
 require 'spec/rake/spectask'
 require 'fileutils'
@@ -46,8 +50,18 @@ if ENV['FROZEN']
 else
   require 'merb-core'
 end
+=======
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:Rakefile
 
+<<<<<<< HEAD:Rakefile
+=======
+require 'merb-core'
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:Rakefile
 require 'merb-core/tasks/merb'
+<<<<<<< HEAD:Rakefile
+=======
+
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:Rakefile
 include FileUtils
 
 # Load the basic runtime dependencies; this will include 
@@ -63,12 +77,30 @@ tasks_path = File.join(File.dirname(__FILE__), "lib", "tasks")
 rake_files = Dir["#{tasks_path}/*.rake"]
 rake_files.each{|rake_file| load rake_file }
 
+<<<<<<< HEAD:Rakefile
 
 desc "start runner environment"
+=======
+desc "Start runner environment"
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:Rakefile
 task :merb_env do
   Merb.start_environment(:environment => init_env, :adapter => 'runner')
 end
 
+<<<<<<< HEAD:Rakefile
+=======
+require 'spec/rake/spectask'
+require 'merb-core/test/tasks/spectasks'
+desc "Run all specs"
+Spec::Rake::SpecTask.new("spec") do |t|
+  t.spec_opts = ["--format", "specdoc", "--colour"]
+  t.spec_files = Dir["spec/**/*_spec.rb"].sort
+  t.rcov = false
+  t.rcov_opts << '--sort' << 'coverage' << '--sort-reverse'
+  t.rcov_opts << '--only-uncovered'
+end
+
+>>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:Rakefile
 ##############################################################################
 # ADD YOUR CUSTOM TASKS IN /lib/tasks
 # NAME YOUR RAKE FILES file_name.rake
