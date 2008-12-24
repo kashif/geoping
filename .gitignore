@@ -1,8 +1,6 @@
 .DS_Store
-<<<<<<< HEAD:.gitignore
 db/*.sqlite3
 log/*.log
-=======
 log/*
 tmp/*
 TAGS
@@ -23,4 +21,3 @@ src/*
 config/database.yml
 gems/gems
 gems/specifications
->>>>>>> dcf87dbaf6e4daa0f80ba12f6ebc919976a2cc75:.gitignore

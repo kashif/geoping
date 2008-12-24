@@ -11,14 +11,43 @@
 
 ActiveRecord::Schema.define(:version => 1) do
 
-  create_table "resources", :force => true do |t|
-    t.string   "name"
-    t.string   "url"
-    t.string   "changesURL"
-    t.string   "rssURL"
-    t.string   "tag"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "pings", :force => true do |t|
+    t.column "name", :string
+    t.column "url", :string
+    t.column "changes_url", :string
+    t.column "feed_url", :string
+    t.column "site_id", :integer
+    t.column "created_at", :timestamp
+    t.column "geom", :point, :srid => 4326, :null => false
   end
+
+  add_index "pings", ["created_at"], :name => "index_pings_on_created_at"
+  add_index "pings", ["geom"], :name => "index_pings_on_geom", :spatial=> true 
+  add_index "pings", ["site_id"], :name => "index_pings_on_site_id"
+
+  create_table "providers", :force => true do |t|
+    t.column "identity_url", :string
+    t.column "nickname", :string
+    t.column "email", :string
+    t.column "salt", :string
+    t.column "crypted_password", :string
+    t.column "created_at", :timestamp
+    t.column "updated_at", :timestamp
+    t.column "default_location", :point, :srid => 4326
+  end
+
+  add_index "providers", ["default_location"], :name => "index_providers_on_default_location", :spatial=> true 
+  add_index "providers", ["identity_url"], :name => "index_providers_on_identity_url"
+
+  create_table "sites", :force => true do |t|
+    t.column "name", :string
+    t.column "url", :string
+    t.column "feed_url", :string
+    t.column "provider_id", :integer
+    t.column "created_at", :timestamp
+    t.column "updated_at", :timestamp
+  end
+
+  add_index "sites", ["provider_id"], :name => "index_sites_on_provider_id"
 
 end

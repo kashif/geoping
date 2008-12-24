@@ -1,17 +1,28 @@
 ---
 # This is a sample database file for the ActiveRecord ORM
-:development: &defaults
-  :adapter: sqlite3
-  :database: db/sample_development.sqlite3
-  :encoding: utf8
+development: &defaults
+  # These are the settings for repository :default
+  adapter:  postgresql
+  database: geoping_development
+  user: sab
+  password: 
+  host: localhost
 
-:test:
-  <<: *defaults
-  :database: db/sample_test.sqlite3
+test:
+  <<:       *defaults
+  database: geoping_test
 
-:production:
-  <<: *defaults
-  :database: db/sample_production.sqlite3
-  
-:rake:
+  # repositories:
+  #   repo1:
+  #     database: sample_1_test.db
+
+production:
+  <<:       *defaults
+  database: geoping_production
+
+  # repositories:
+  #   repo1:
+  #     database: sample_production.db
+
+rake:
   <<: *defaults
